@@ -11,7 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <!-- Styles -->
-        <style>
+        <!-- <style>
             html, body {
                 background-color: #fff;
                 color: #636b6f;
@@ -62,19 +62,48 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
-        </style>
+        </style> -->
     </head>
     <body>
-       
-        <div style="display:flex;align-items:center;justify-content:center">
-            <a href="/save-the-queen">Save The Queen</a>
-            <a href="/form-validation">Form Validation</a>
-            <a href="/vacuum-cleaner">Vacuum Cleaner</a>
-            <a href="/4-connect">4 connect</a>
-            <a href="/gender">Gender</a>
+        <div class="m">
+            Enter a name
+            <input type="text" v-model="name">
+            <button @click="check()">Check</button>
+            
+            <h3>@{{res}}</h3>
         </div>
-
+        
 
        <script src="{{asset('js/app.js')}}"></script>
+       <script>
+        var vm = new Vue({
+            el: '.m',
+            data: {
+                res: '',
+                name: ''
+            },
+            methods:{
+                check: function(){
+                    axios.get('https://api.genderize.io/?name='+vm.name)
+                    .then(function (response) {
+                        vm.res = response.data.gender;
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    });
+  
+                    
+                }
+            },
+            watch:{
+                name: function(){
+                    vm.res = '';
+                }
+            }
+
+        });
+       </script>
     </body>
 </html>
